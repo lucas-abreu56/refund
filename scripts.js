@@ -1,10 +1,8 @@
 //Seleciona os elementos do formulário
 const form = document.querySelector('form');
-const nameInput = document.querySelector('#name');
 const amountInput = document.querySelector('#amount');
 const expenseInput = document.querySelector('#expense');
 const categoryInput = document.querySelector('#category');
-const dateInput = document.querySelector('#date');
 
 //Seleciona os elementos da lista de despesas
 const expenseList = document.querySelector("ul");
@@ -96,11 +94,13 @@ function expenseAdd(newExpense){
         //Atualiza os totais de despesas
         updateTotals();
 
+        //Limpa os campos do formulário
+        formClear();
+
 
     } catch (error) {
-        alert('Erro ao adicionar despesa: ' + error.message);
-        // Loga o erro no console para depuração
-        console.error('Erro ao adicionar despesa:', error);
+        alert('Erro ao adicionar despesa. Verifique os dados inseridos e tente novamente.');
+        console.error(error);
     }
 }
 
@@ -147,8 +147,25 @@ function updateTotals() {
 
     } catch (error) {
         alert('Erro ao atualizar totais.');
+        console.error(error);
     }
 }
 
+//Evento que captura o clique nos itens da lista
+expenseList.addEventListener("click", function(event) {
+    // Verifica se o elemento clicado é o ícone de remover
+    if (event.target.classList.contains('remove-icon')) {
+        const item = event.target.closest('.expense'); // Encontra o item da despesa
+        item.remove(); // Remove o item da lista
+    }
 
+    updateTotals(); // Atualiza os totais de despesas
+})
 
+//Limpa os campos do formulário
+function formClear() {
+    amountInput.value = '';
+    expenseInput.value = '';
+
+    expenseInput.focus();
+}
