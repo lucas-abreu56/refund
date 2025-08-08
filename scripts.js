@@ -133,9 +133,20 @@ function updateTotals() {
             total += Number(value);
         }
 
-        expensesTotal.textContent = formatCurrency(total);
+        //Cria a span para adicionar o R$ formatado
+        const symbolBRL = document.createElement("small");
+        symbolBRL.textContent = "R$";
+
+        total = formatCurrency(total).toUpperCase().replace("R$", "");
+
+        // Limpa o conteúdo do elemento
+        expensesTotal.innerHTML = '';
+
+        //
+        expensesTotal.append(symbolBRL, total);
+
     } catch (error) {
-        alert('Erro ao atualizar totais: ' + error.message);
+        alert('Erro ao atualizar totais.');
     }
 }
 
