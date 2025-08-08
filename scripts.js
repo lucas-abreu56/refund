@@ -9,6 +9,7 @@ const dateInput = document.querySelector('#date');
 //Seleciona os elementos da lista de despesas
 const expenseList = document.querySelector("ul");
 const expensesQuantity = document.querySelector("aside header p span");
+const expensesTotal = document.querySelector("aside header h2");
 
 //Adiciona um evento de input ao formulário
 amountInput.oninput = function() {
@@ -41,7 +42,7 @@ form.onsubmit = function(event) {
         expense: expenseInput.value,
         category_id: categoryInput.value,
         category_name: categoryInput.options[categoryInput.selectedIndex].text,
-        amountInput: amountInput.value,
+        amount: amountInput.value,
         created_at: new Date(),
     };
 
@@ -78,7 +79,7 @@ function expenseAdd(newExpense){
         //Cria o valor da despesa
         const expenseAmount = document.createElement("span");
         expenseAmount.classList.add("expense-amount");
-        expenseAmount.innerHTML = `<small>R$</small>${newExpense.amountInput.toUpperCase().replace('R$', '')}`;
+        expenseAmount.innerHTML = `<small>R$</small>${newExpense.amount.replace('R$', '')}`;
 
         //Cria o ícone de remover
         const removeIcon = document.createElement("img");
@@ -117,7 +118,22 @@ function updateTotals() {
         for (let item = 0; item < items.length; item++) {
             //Seleciona o valor do item
             const itemAmount = items[item].querySelector('.expense-amount').textContent;
+
+            let value = itemAmount.replace(/[^\d,]/g, '').replace(",", "."); 
+
+            // Converte o valor para float
+            value = parseFloat(value);
+
+            //Verifica se o valor é um número
+            if (isNaN(value)) {
+                return alert('Erro ao calcular o total: valor inválido encontrado.');
+            }
+
+            //Incrementa o total
+            total += Number(value);
         }
+
+        expensesTotal.textContent = formatCurrency(total);
     } catch (error) {
         alert('Erro ao atualizar totais: ' + error.message);
     }
